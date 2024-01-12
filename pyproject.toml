@@ -1,0 +1,31 @@
+[build-system]
+requires = [
+    "setuptools>=68.2.2",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.flake8]
+ingore = ["E203", "E266", "E501", "W503", "F403", "F401"]
+max-line-length = 79
+max-complexity = 18
+select = ["B", "C", "E", "F", "W", "T4", "B9"]
+
+[tool.black]
+line-length = 79
+target-version = ["py311"]
+include = "\\.pyi?$"
+exclude = """
+/(
+    \\.eggs
+  | \\.git
+  | \\.hg
+  | \\.mypy_cache
+  | \\.tox
+  | \\.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+"""
