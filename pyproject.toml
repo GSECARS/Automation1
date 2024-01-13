@@ -6,14 +6,14 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.flake8]
-ingore = ["E203", "E266", "E501", "W503", "F403", "F401"]
-max-line-length = 79
+ignore = ["E203", "E266", "E501", "W503", "F403", "F401"]
+max-line-length = 120
 max-complexity = 18
 select = ["B", "C", "E", "F", "W", "T4", "B9"]
 
 [tool.black]
-line-length = 79
-target-version = ["py311"]
+line-length = 120
+target-version = ["py39"]
 include = "\\.pyi?$"
 exclude = """
 /(
