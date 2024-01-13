@@ -7,9 +7,7 @@ from automation1 import Controller
 from pyautomation.utils import print_output
 
 
-def requires_automation1_connection(
-    method: Callable[..., Any]
-) -> Callable[..., Any]:
+def requires_automation1_connection(method: Callable[..., Any]) -> Callable[..., Any]:
     """Decorator to handle connecting and disconnecting from the controller."""
 
     @wraps(method)
@@ -37,9 +35,7 @@ class AerotechController:
     axis: list[AutomationAxis] = field(compare=False)
     verbose: bool = field(default=False, compare=False)
 
-    _automation1: Controller | None = field(
-        init=False, repr=False, compare=False, default=None
-    )
+    _automation1: Controller | None = field(init=False, repr=False, compare=False, default=None)
 
     def connect(self) -> None:
         """Connects Aerotech controller."""

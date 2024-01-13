@@ -1,4 +1,4 @@
-from pyautomation import controller, utils
+from pyautomation import controller, modules, utils
 
 
-__all__ = ["controller", "utils"]
+__all__ = ["controller", "modules", "utils"]
