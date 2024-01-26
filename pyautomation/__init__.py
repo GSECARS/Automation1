@@ -12,10 +12,10 @@ __all__ = ["controller", "modules", "utils", "PyAutomation"]
 class PyAutomation:
     ip: str = field(compare=False)
     axis: list[controller.AutomationAxis] = field(compare=False)
-    verbose: bool = field(default=False, compare=False)
     pso_distance_input: PsoDistanceInput = field(compare=False)
     pso_window_input: PsoWindowInput = field(compare=False)
     pso_output_pin: PsoOutputPin = field(compare=False)
+    verbose: bool = field(default=False, compare=False)
 
     _controller: controller.AerotechController = field(init=False, compare=False)
     _pso: modules.PSO = field(init=False, compare=False)

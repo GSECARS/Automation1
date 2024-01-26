@@ -7,8 +7,8 @@ from automation1 import (
     PsoWaveformMode,
     PsoOutputSource,
     PsoOutputPin,
+    PsoWindowEventMode
 )
-from automation1.references import PsoEventMask
 
 from pyautomation.controller import AerotechController, AutomationAxis
 
@@ -95,7 +95,7 @@ class PsoWindow(PsoModuleBase):
         self.controller.automation1.runtime.commands.pso.pso_window_output_on(axis=self.axis, window_number=0)
         # Configure the event mask to include the window output
         self.controller.automation1.runtime.commands.pso.pso_event_configure_mask(
-            axis=self.axis, event_mask=PsoEventMask.WindowMask
+            axis=self.axis, event_mask=PsoWindowEventMode.PsoEventMask.WindowMask
         )
 
     def disable(self) -> None:
@@ -141,6 +141,8 @@ class PsoWaveform(PsoModuleBase):
 @dataclass
 class PsoOutput:
     """PSO output module."""
+    controller: AerotechController = field(compare=False)
+    axis: AutomationAxis = field(compare=False)
 
     def prepare_module(self) -> None:
         # Configure the waveform module as the PSO output
