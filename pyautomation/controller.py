@@ -11,7 +11,7 @@ def requires_automation1_connection(method: Callable[..., Any]) -> Callable[...,
     """Decorator to handle connecting and disconnecting from the controller."""
 
     @wraps(method)
-    def wrapper(self: 'AerotechController', *args: Any, **kwargs: Any) -> Any:
+    def wrapper(self: "AerotechController", *args: Any, **kwargs: Any) -> Any:
         if not self._automation1:
             print_output(
                 message="You are not connected to a controller!",
@@ -21,6 +21,7 @@ def requires_automation1_connection(method: Callable[..., Any]) -> Callable[...,
         return method(self, *args, **kwargs)
 
     return wrapper
+
 
 @dataclass
 class AutomationAxis:

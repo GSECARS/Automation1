@@ -34,3 +34,7 @@ class PyAutomation:
         """Connects and starts the Aerotech controller."""
         self._controller.connect()
         self._controller.start()
+
+    def disable_controller(self) -> None:
+        """Disconnects the Aerotech controller."""
+        self._controller.disconnect()

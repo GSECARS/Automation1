@@ -42,12 +42,12 @@ class PsoModuleBase(ABC):
 class PsoDistance(PsoModuleBase):
     """PSO module for distance."""
 
-    def prepare_module(self, distance: float) -> None:
+    def prepare_module(self, pso_distance_input: PsoDistanceInput, distance: float) -> None:
         """Prepares the PSO module for use."""
         # Configure which encoder signal to track
         self.controller.automation1.runtime.commands.pso.pso_distance_configure_inputs(
             axis=self.axis.name,
-            inputs=[self.controller.automation1.pso_distance_input],
+            inputs=[pso_distance_input],
         )
         # Configure the PSO distance module to fire every "distance" counts
         self.controller.automation1.runtime.commands.pso.pso_distance_configure_fixed_distance(
@@ -74,20 +74,20 @@ class PsoDistance(PsoModuleBase):
 class PsoWindow(PsoModuleBase):
     """PSO window module."""
 
-    def prepare_module(self, lower_bound: float, upper_bound: float) -> None:
+    def prepare_module(self, pso_window_input: PsoWindowInput, start_position: float, end_position: float, direction: int) -> None:
         # Setup which window to use (0 or 1)
         self.controller.automation1.runtime.commands.pso.pso_window_configure_input(
             axis=self.axis,
             window=0,
-            input=self.controller.automation1.pso_window_input,
-            reverse_direction=0,
+            input=pso_window_input,
+            reverse_direction=direction,
         )
         # Setup the window range
         self.controller.automation1.runtime.commands.pso.pso_window_configure_fixed_range(
             axis=self.axis,
             window=0,
-            lower_bound=self.convert_to_counts(lower_bound),
-            upper_bound=self.convert_to_counts(upper_bound),
+            lower_bound=self.convert_to_counts(start_position),
+            upper_bound=self.convert_to_counts(end_position),
         )
 
     def enable(self) -> None:
@@ -124,7 +124,7 @@ class PsoWaveform(PsoModuleBase):
         )
         # Configure the number of output events per pulse
         self.controller.automation1.runtime.commands.pso.pso_waveform_configure_pulse_fixed_count(
-            axis=self.axis, pulse_count=number_of_pulses
+            axis=self.axis, pulse_count=1
         )
         # Apply waveform configuration
         self.controller.automation1.runtime.commands.pso.pso_waveform_apply_pulse_configuration(axis=self.axis)
@@ -144,7 +144,7 @@ class PsoOutput:
     controller: AerotechController = field(compare=False)
     axis: AutomationAxis = field(compare=False)
 
-    def prepare_module(self) -> None:
+    def prepare_module(self, pso_output_pin: PsoOutputPin) -> None:
         # Configure the waveform module as the PSO output
         self.controller.automation1.runtime.commands.pso.pso_output_configure_source(
             axis=self.axis, output_source=PsoOutputSource.Waveform
@@ -152,7 +152,7 @@ class PsoOutput:
         # Setup the physical output pin
         self.controller.automation1.runtime.commands.pso.pso_output_configure_output(
             axis=self.axis,
-            output=PsoOutputPin.iXC4eAuxiliaryMarkerDifferential,
+            output=pso_output_pin
         )
 
 
@@ -178,16 +178,17 @@ class PSO:
     def prepare_modules(
         self,
         distance: float,
-        lower_bound: float,
-        upper_bound: float,
+        start_position: float,
+        end_position: float,
         exposure: float,
         number_of_pulses: int,
+        travel_direction: int = 0
     ) -> None:
         """Prepares the PSO modules for use."""
-        self._pso_distance_module.prepare_module(distance=distance)
-        self._pso_window_module.prepare_module(lower_bound=lower_bound, upper_bound=upper_bound)
+        self._pso_distance_module.prepare_module(pso_distance_input=self.pso_distance_input, distance=distance)
+        self._pso_window_module.prepare_module(pso_window_input=self.pso_window_input, start_position=start_position, end_position=end_position, direction=travel_direction)
         self._pso_waveform_module.prepare_module(exposure=exposure, number_of_pulses=number_of_pulses)
-        self._pso_output_module.prepare_module()
+        self._pso_output_module.prepare_module(pso_output_pin=self.pso_output_pin)
 
     def enable_modules(self) -> None:
         """Enables the PSO modules."""
