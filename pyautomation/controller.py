@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from functools import wraps
 from typing import Any, Callable
 
-from automation1 import Controller
+from automation1 import AxisStatusItem, Controller, StatusItemConfiguration
 
 from pyautomation.utils import print_output
 
@@ -63,6 +63,29 @@ class AerotechController:
         self._automation1.disconnect()
         print_output(
             message=f"Disconnected from the Aerotech controller at {self.ip}.",
+            verbose=self.verbose,
+        )
+
+    @requires_automation1_connection
+    def get_current_position(self, axis: AutomationAxis) -> float:
+        """Gets the current position of the axis."""
+        item_config = StatusItemConfiguration()
+        item_config.axis.add(AxisStatusItem.ProgramPosition, axis.name)
+        current_position = float(
+            self._automation1.runtime.status.get_status_items(item_config)
+            .axis.get(AxisStatusItem.ProgramPosition, axis.name)
+            .value
+        )
+        return round(current_position, 4)
+
+    @requires_automation1_connection
+    def move_linear(self, axis: AutomationAxis, distance: float, speed: float) -> None:
+        """Moves the axis linearly."""
+        self._automation1.runtime.commands.motion.move_linear(
+            axes=axis.name, distances=[distance], coordinated_speed=speed
+        )
+        print_output(
+            message=f"Moved axis {axis.name} {distance} units.",
             verbose=self.verbose,
         )
 
