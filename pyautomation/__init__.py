@@ -1,3 +1,37 @@
+#!/usr/bin/python3
+# ----------------------------------------------------------------------------------
+# Project: PyAutomation
+# File: pyautomation/__init__.py
+# ----------------------------------------------------------------------------------
+# Purpose:
+# This file is used to define the PyAutomation class which is the main class of the
+# PyAutomation package. The PyAutomation class is used to control the Aerotech
+# controller and the PSO modules. The class is used to load and run trajectories
+# on the PSO modules.
+# ----------------------------------------------------------------------------------
+# Author: Christofanis Skordas
+#
+# Copyright (C) 2024 GSECARS, The University of Chicago, USA
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ----------------------------------------------------------------------------------
+
 import time
 from dataclasses import dataclass, field
 from functools import wraps
@@ -89,9 +123,7 @@ class PyAutomation:
     @with_active_trajectory
     def _compute_taxi_distance(self) -> None:
         """Computes the taxi distance for the trajectory."""
-        self._active_trajectory.taxi_distance = ceil(
-            self._active_trajectory.accel_distance + (self._active_trajectory.accel_distance * 0.001)
-        )
+        self._active_trajectory.taxi_distance = ceil(self._active_trajectory.accel_distance + (self._active_trajectory.accel_distance * 0.001))
 
     @with_active_trajectory
     def _prepare_pso(self) -> None:
@@ -120,8 +152,7 @@ class PyAutomation:
         # Move to starting position
         self._controller.move_linear(
             axis=self.axis[0],
-            distance=starting_position
-            + (-self._active_trajectory.taxi_distance * self._active_trajectory.travel_direction),
+            distance=starting_position + (-self._active_trajectory.taxi_distance * self._active_trajectory.travel_direction),
             speed=self._active_trajectory.base_velocity,
         )
 
