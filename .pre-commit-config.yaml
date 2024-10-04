@@ -1,13 +1,52 @@
+# ----------------------------------------------------------------------------------
+# Project: PyAutomation
+# File: .pre-commit-config.yaml
+# ----------------------------------------------------------------------------------
+# Purpose: 
+# This file is used to configure the pre-commit hooks that will be used in the 
+# project.
+# ----------------------------------------------------------------------------------
+# Author: Christofanis Skordas
+#
+# Copyright (C) 2024 GSECARS, The University of Chicago, USA
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ----------------------------------------------------------------------------------
+
 repos:
 
   - repo: https://github.com/psf/black
-    rev: 23.12.1
+    rev: 24.8.0
     hooks:
       - id: black
-        language_version: python3.11
+        language_version: python3.12
+        args: ["--config=pyproject.toml"]
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
     hooks:
       - id: flake8
-        args: [--max-line-length=120]
+        args: [--max-line-length=160]
+        additional_dependencies: ["Flake8-pyproject"]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        args: ["--config=pyproject.toml"]
