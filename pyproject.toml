@@ -77,6 +77,9 @@ development = [
 Homepage = "https://github.com/GSECARS/PyAutomation"
 Issues = "https://github.com/GSECARS/PyAutomation/issues"
 
+[tool.setuptools.packages.find]
+exclude = ["automatio1"]
+
 [tool.black]
 line-length = 160
 target-version = ["py312"]
