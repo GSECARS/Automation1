@@ -123,7 +123,7 @@ class PyAutomation:
     @with_active_trajectory
     def _compute_taxi_distance(self) -> None:
         """Computes the taxi distance for the trajectory."""
-        self._active_trajectory.taxi_distance = ceil(self._active_trajectory.accel_distance + (self._active_trajectory.accel_distance * 0.001))
+        self._active_trajectory.taxi_distance = self._active_trajectory.distance / self._active_trajectory.number_of_pulses
 
     @with_active_trajectory
     def _prepare_pso(self) -> None:
