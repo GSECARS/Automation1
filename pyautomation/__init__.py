@@ -214,4 +214,5 @@ class PyAutomation:
 
     def abort_trajectory(self) -> None:
         """Aborts the trajectory."""
-        pass
+        self._controller.abort_motion(self.axis[0])
+        self._reset_axis()

@@ -124,6 +124,15 @@ class AerotechController:
             verbose=self.verbose,
         )
 
+    @requires_automation1_connection
+    def abort_motion(self, axis: AutomationAxis) -> None:
+        """Aborts the motion of the axis."""
+        self._automation1.runtime.commands.motion.abort(axes=axis.name)
+        print_output(
+            message=f"Aborted motion of axis {axis.name}.",
+            verbose=self.verbose,
+        )
+
     @property
     def automation1(self) -> Controller | None:
         return self._automation1
