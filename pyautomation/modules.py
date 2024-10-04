@@ -8,6 +8,8 @@ from pyautomation.controller import AerotechController, AutomationAxis
 
 @dataclass
 class PsoModuleBase(ABC):
+    """Abstract base class for PSO modules."""
+
     controller: AerotechController = field(compare=False)
     axis: AutomationAxis = field(compare=False)
 
@@ -33,7 +35,7 @@ class PsoModuleBase(ABC):
 
 @dataclass
 class PsoDistance(PsoModuleBase):
-    """PSO module for distance."""
+    """PSO distance module."""
 
     def prepare_module(self, pso_distance_input: PsoDistanceInput, distance: float, number_of_pulses) -> None:
         """Prepares the PSO module for use."""
@@ -67,9 +69,7 @@ class PsoDistance(PsoModuleBase):
 class PsoWindow(PsoModuleBase):
     """PSO window module."""
 
-    def prepare_module(
-        self, pso_window_input: PsoWindowInput, start_position: float, end_position: float, direction: int
-    ) -> None:
+    def prepare_module(self, pso_window_input: PsoWindowInput, start_position: float, end_position: float, direction: int) -> None:
         # Set direction of travel for Automation1
         direction = 0 if direction == -1 else 1
 
@@ -105,23 +105,19 @@ class PsoWaveform(PsoModuleBase):
 
     def prepare_module(self, exposure: float) -> None:
         # Configure the waveform module for pulse mode
-        self.controller.automation1.runtime.commands.pso.pso_waveform_configure_mode(
-            axis=self.axis.name, waveform_mode=PsoWaveformMode.Pulse
-        )
+        self.controller.automation1.runtime.commands.pso.pso_waveform_configure_mode(axis=self.axis.name, waveform_mode=PsoWaveformMode.Pulse)
         # Configure the PSO total time per fixed distance pulse in microseconds
         self.controller.automation1.runtime.commands.pso.pso_waveform_configure_pulse_fixed_total_time(
             axis=self.axis.name,
-            total_time=(exposure * 1000),  # convert to microseconds
+            total_time=(exposure * 1000000 * 0.1),  # convert to microseconds
         )
         # Configure the PSO total ON time per pulse (50% duty cycle) in microseconds
         self.controller.automation1.runtime.commands.pso.pso_waveform_configure_pulse_fixed_on_time(
             axis=self.axis.name,
-            on_time=((exposure * 1000) / 2),  # convert to microseconds and 50% duty cycle
+            on_time=((exposure * 1000000) / 2),  # convert to microseconds and 50% duty cycle
         )
         # Configure the number of output events per pulse
-        self.controller.automation1.runtime.commands.pso.pso_waveform_configure_pulse_fixed_count(
-            axis=self.axis.name, pulse_count=1
-        )
+        self.controller.automation1.runtime.commands.pso.pso_waveform_configure_pulse_fixed_count(axis=self.axis.name, pulse_count=1)
         # Apply waveform configuration
         self.controller.automation1.runtime.commands.pso.pso_waveform_apply_pulse_configuration(axis=self.axis.name)
 
@@ -143,13 +139,9 @@ class PsoOutput:
 
     def prepare_module(self, pso_output_pin: PsoOutputPin) -> None:
         # Configure the waveform module as the PSO output
-        self.controller.automation1.runtime.commands.pso.pso_output_configure_source(
-            axis=self.axis.name, output_source=PsoOutputSource.Waveform
-        )
+        self.controller.automation1.runtime.commands.pso.pso_output_configure_source(axis=self.axis.name, output_source=PsoOutputSource.Waveform)
         # Setup the physical output pin
-        self.controller.automation1.runtime.commands.pso.pso_output_configure_output(
-            axis=self.axis.name, output=pso_output_pin
-        )
+        self.controller.automation1.runtime.commands.pso.pso_output_configure_output(axis=self.axis.name, output=pso_output_pin)
 
 
 @dataclass
@@ -181,9 +173,7 @@ class PSO:
         travel_direction: int,
     ) -> None:
         """Prepares the PSO modules for use."""
-        self._pso_distance_module.prepare_module(
-            pso_distance_input=self.pso_distance_input, distance=distance, number_of_pulses=number_of_pulses
-        )
+        self._pso_distance_module.prepare_module(pso_distance_input=self.pso_distance_input, distance=distance, number_of_pulses=number_of_pulses)
         self._pso_window_module.prepare_module(
             pso_window_input=self.pso_window_input,
             start_position=start_position,
