@@ -118,7 +118,14 @@ class AerotechController:
     @requires_automation1_connection
     def move_linear(self, axis: AutomationAxis, distance: float, speed: float) -> None:
         """Moves the axis linearly."""
-        self._automation1.runtime.commands.motion.move_linear(axes=axis.name, distances=[distance], coordinated_speed=speed)
+        try:
+            self._automation1.runtime.commands.motion.move_linear(axes=axis.name, distances=[distance], coordinated_speed=speed)
+        except Exception as e:
+            print_output(
+                message=f"Failed to move axis {axis.name} {distance} units.",
+                verbose=self.verbose,
+            )
+            print_output(message=f"Error: {e}", verbose=self.verbose)
         print_output(
             message=f"Moved axis {axis.name} {distance} units.",
             verbose=self.verbose,
