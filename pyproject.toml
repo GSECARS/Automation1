@@ -1,0 +1,121 @@
+# ----------------------------------------------------------------------------------
+# Project: PyAutomation
+# File: pyproject.toml
+# ----------------------------------------------------------------------------------
+# Purpose: 
+# This file is used to specify the build system of the project.
+# ----------------------------------------------------------------------------------
+# Author: Christofanis Skordas
+#
+# Copyright (C) 2024 GSECARS, The University of Chicago, USA
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ----------------------------------------------------------------------------------
+
+[build-system]
+requires = [
+    "setuptools >= 75.1.0",
+    "setuptools_scm >= 8.1.0",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PyAutomation"
+version = "0.0.1"
+authors = [
+    {name = "Christofanis Skordas", email = "55315750+skordaschristofanis@users.noreply.github.com"},
+    {name = "Stella Chariton", email = "52049100+CharitonS@users.noreply.github.com"}
+]
+maintainers = [
+    {name = "Christofanis Skordas", email = "55315750+skordaschristofanis@users.noreply.github.com"}
+]
+description = "A python library used to interface with the Aerotech automation1 controller API."
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {file = "LICENSE"}
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering"
+]
+requires-python = ">=3.12"
+dependencies = [
+]
+
+[project.optional-dependencies]
+development = [
+    "black>=24.8.0",
+    "flake8>=7.1.1",
+    "mypy>=1.11.2",
+    "pre-commit>=3.8.0",
+    "setuptools>=75.1.0",
+    "setuptools-scm>=8.1.0",
+    "twine>=5.1.1"
+]
+
+[project.urls]
+Homepage = "https://github.com/GSECARS/PyAutomation"
+Issues = "https://github.com/GSECARS/PyAutomation/issues"
+
+[tool.setuptools.packages.find]
+exclude = ["automatio1"]
+
+[tool.black]
+line-length = 160
+target-version = ["py312"]
+include = "\\.pyi?$"
+exclude = """
+/(
+    \\.eggs
+  | \\.git
+  | \\.hg
+  | \\.mypy_cache
+  | \\.tox
+  | \\.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+"""
+
+[tool.flake8]
+exclude = ".git,__pycache__,build,dist"
+ignore = ["E203", "E266", "E501", "W503", "F403", "F401"]
+max-line-length = 160
+max-complexity = 18
+select = ["B", "C", "E", "F", "W", "T4", "B9"]
+
+[tool.mypy]
+mypy_path = "pyautomation"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+no_implicit_reexport = true
